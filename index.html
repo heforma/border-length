@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let matrix = [
+            [0, 0, 0, 1, 1],
+            [0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 1],
+            [0, 1, 0, 0, 1],
+            [0, 0, 0, 0, 0]
+        ];
+
+        const calculateBorderLength = (matrix) => {
+            let borders = [];
+
+            let pushBorder = (border) => {
+                let elementIndex = borders.findIndex(element => element.x === border.x && element.y === border.y);
+                if (elementIndex === -1) {
+                    borders.push(border);
+                }
+            }
+
+            let checkSide = (x, y, xLength, yLength) => {
+                if ((x >= 0 && x < xLength) && (y >= 0 && y < yLength)) {
+                    if (matrix[y][x] === 0) {
+                        pushBorder({ x, y });
+                    }
+                } else {
+                    pushBorder({ x, y });
+                }
+            }
+
+
+            for (let i = 0; i < matrix.length; i++) {
+                let row = matrix[i];
+                for (let j = 0; j < row.length; j++) {
+                    let col = row[j];
+                    if (col === 0) {
+                        continue;
+                    }
+
+                    checkSide(j - 1, i, row.length, matrix.length);
+                    checkSide(j + 1, i, row.length, matrix.length);
+                    checkSide(j, i - 1, row.length, matrix.length);
+                    checkSide(j, i + 1, row.length, matrix.length);
+                }
+            }
+
+            return borders.length;
+        };
+
+        let figureLength = calculateBorderLength(matrix);
+        console.log(`Figure length is: ${figureLength}`);
+    </script>
+</body>
+</html>
